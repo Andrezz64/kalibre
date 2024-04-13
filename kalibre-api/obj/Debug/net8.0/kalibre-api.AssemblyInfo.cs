@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("kalibre-api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bfa15fee4ae009c1c06f409784b189137c1e1b50")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d005a2c040def3076720a95123e0dc4ee91b6a41")]
 [assembly: System.Reflection.AssemblyProductAttribute("kalibre-api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("kalibre-api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
