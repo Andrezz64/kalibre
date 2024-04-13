@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "gdkA52CdvDAYP2XXnT8PDaQhZZ608Zz63WJYkrdbDHU=",
+  "Source": "kalibre-api",
+  "BasePath": "_content/kalibre-api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
