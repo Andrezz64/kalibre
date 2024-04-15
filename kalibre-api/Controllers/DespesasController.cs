@@ -17,9 +17,9 @@ public class DespesasController : ControllerBase
     [HttpGet()]
     public IActionResult Get()
     {
-        var lista = _context.Despesas.ToList<Despesa>();
-
-        return Ok(lista);
+        var lista = _context.Despesas.OrderByDescending(despesas => despesas.Data);
+        var response = new{Status="Ok",data=lista};
+        return Ok(response);
     }
 
     [HttpPost()]
@@ -30,16 +30,17 @@ public class DespesasController : ControllerBase
         try
         {
             _context.Add(new Despesa
-            {
-                Data = now,
+            {   
+                Data = despesa.Data.ToLocalTime(),
                 Valor = despesa.Valor
             });
             _context.SaveChanges();
-            return Ok(despesa);
+            return Ok(new {Status="Ok",data=despesa});
         }
         catch (Exception ex)
         {
-            return StatusCode(500, "ocorreu um erro interno: " + ex.Message);
+            System.Console.WriteLine(ex);
+            return StatusCode(500, new {status="Error",msg=ex.Message});
         }
 
     }
@@ -69,11 +70,13 @@ public class DespesasController : ControllerBase
         {
             return BadRequest();
         }
+    
         Despesa DespesaAtualizada =  new()
         {
             DespesaId =  id,
             Valor = despesa.Valor,
-            Data = despesa.Data
+            Data = despesa.Data.ToLocalTime(),
+          
         };
          _context.Despesas.Update(DespesaAtualizada);
          _context.SaveChanges();

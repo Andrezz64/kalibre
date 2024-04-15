@@ -17,7 +17,7 @@ public class ReceitasController : ControllerBase
     [HttpGet()]
     public IActionResult Get()
     {
-        var lista = _context.Receitas.ToList<Receita>();
+        var lista = _context.Receitas.OrderByDescending(despesas => despesas.Data);
 
         return Ok(lista);
     }
