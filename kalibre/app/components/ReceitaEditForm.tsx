@@ -1,22 +1,23 @@
 import { useState } from "react";
+import Receita from "../models/ReceitaModel";
 
-export default function DespesaEditForm(props:any){
+export default function ReceitaEditForm(props:any){
     
     const [valor,setValor] = useState(props.valor);
     const [data,setData] = useState(props.data);
 
-    const editDespesa = (e:any) =>{
+    const editReceita = (e:any) =>{
         e.preventDefault()
         const options = {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
-              'X-Api-Key': 'IpKH1FJ7lw5Canu8cvA5T2AGsLdivGjt2PDm09Uz'
+              
             },
-            body: `{"despesaId":${props.despesaid},"valor":${valor},"data":"${data}"}`
+            body: `{"receitaid":${props.receitaId},"valor":${valor},"data":"${data}"}`
           };
           
-          fetch('http://172.16.32.16:5014/api/v1/despesas/'+props.despesaid, options)
+          fetch('http://172.16.32.16:5014/api/v1/receitas/'+props.receitaId, options)
             .then(response => response.json())
             .then(response => console.log(response))
             .catch(err => console.error(err));
@@ -26,7 +27,7 @@ export default function DespesaEditForm(props:any){
     
     return(
 
-         <form onSubmit={editDespesa} className="flex flex-col justify-center items-center  gap-2 mt-5">
+         <form onSubmit={editReceita} className="flex flex-col justify-center items-center  gap-2 mt-5">
         <span className="text-start">Valor</span>
         <input
           type="number"

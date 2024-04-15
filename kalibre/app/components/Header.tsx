@@ -23,8 +23,8 @@ export default function Header() {
                     <ul className='text-white mt-2 flex max-md:flex-col gap-10 max-md:gap-2'>
                          <li><a href="/">Dashboard</a></li>
                         <li><a href="/despesas">Despesas</a></li>
-                        <li><a href="#">Receitas</a></li>
-                        <li><a href="#">Relatórios</a></li>
+                        <li><a href="/receitas">Receitas</a></li>
+                        <li><a href="/relatorio">Relatórios</a></li>
                     </ul>
                 </nav>
             )}

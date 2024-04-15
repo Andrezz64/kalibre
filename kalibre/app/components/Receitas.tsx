@@ -1,6 +1,6 @@
 "use client";
 import { Pencil, Trash } from "@phosphor-icons/react/dist/ssr";
-import Despesa from "../models/DespasaModel";
+
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -11,10 +11,11 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
-import DespesaEditForm from "./DespesaEditForm";
 import { Calendar, CurrencyCircleDollar } from "@phosphor-icons/react";
 
-export default function Despesas(props: Despesa) {
+import ReceitaEditForm from "./ReceitaEditForm";
+
+export default function Receitas(props: any) {
   const NovaInstanciaData = new Date(props.data);
   const DataFormatada = NovaInstanciaData.toLocaleString("pt-BR");
 
@@ -47,12 +48,13 @@ export default function Despesas(props: Despesa) {
     };
 
     fetch(
-      "http://172.16.32.16:5014/api/v1/despesas/" + props.despesaId,
+      "http://172.16.32.16:5014/api/v1/receitas/" + props.receitaId,
       options
     )
       .then((response) => response.json())
       .then((response) => console.log(response))
       .catch((err) => console.error(err));
+      console.log(props)
     location.reload();
   };
 
@@ -63,7 +65,7 @@ export default function Despesas(props: Despesa) {
       <h2 className="flex items-center"><Calendar size={26} />{DataFormatada}</h2>
       <h2>
         
-        <span className="text-red-500 flex items-center"><CurrencyCircleDollar size={26} />R${props.valor.toString()}</span>
+        <span className="text-green-500 flex items-center"><CurrencyCircleDollar size={26} />R${props.valor.toString()}</span>
       </h2>
       <div className="flex gap-3 mt-1">
         <Button variant="outlined" onClick={handleClickOpen}>
@@ -80,7 +82,7 @@ export default function Despesas(props: Despesa) {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Você está prestes a excluir essa despesa, essa ação não pode ser
+              Você está prestes a excluir essa receita, essa ação não pode ser
               desfeita
             </DialogContentText>
           </DialogContent>
@@ -109,14 +111,14 @@ export default function Despesas(props: Despesa) {
         >
           <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Editar Despesa
+              Editar receita
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              <DespesaEditForm
-                despesaid={props.despesaId}
+              <ReceitaEditForm
+                receitaId={props.receitaId}
                 valor={props.valor}
                 data={props.data}
-              ></DespesaEditForm>
+              ></ReceitaEditForm>
             </Typography>
           </Box>
         </Modal>

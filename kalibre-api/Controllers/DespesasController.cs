@@ -18,29 +18,27 @@ public class DespesasController : ControllerBase
     public IActionResult Get()
     {
         var lista = _context.Despesas.OrderByDescending(despesas => despesas.Data);
-        var response = new{Status="Ok",data=lista};
-        return Ok(response);
+
+        return Ok(new { Status = "Ok", data = lista });
     }
 
     [HttpPost()]
     public IActionResult Post([FromBody] Despesa despesa)
     {
-        DateTime now = DateTime.Now;
-
         try
         {
             _context.Add(new Despesa
-            {   
-                Data = despesa.Data.ToLocalTime(),
+            {
+                Data = despesa.Data.AddHours(3).ToLocalTime(),
                 Valor = despesa.Valor
             });
             _context.SaveChanges();
-            return Ok(new {Status="Ok",data=despesa});
+            return Ok(new { Status = "Ok", data = despesa });
         }
         catch (Exception ex)
         {
             System.Console.WriteLine(ex);
-            return StatusCode(500, new {status="Error",msg=ex.Message});
+            return StatusCode(500, new { status = "Error", msg = ex.Message });
         }
 
     }
@@ -59,27 +57,29 @@ public class DespesasController : ControllerBase
 
             return StatusCode(204);
         }
-        catch(Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException ex){
-            return NotFound("Não foi possivel localizar o objeto no banco de dados"+ex.Message);
+        catch (Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException ex)
+        {
+            return NotFound("Não foi possivel localizar o objeto no banco de dados" + ex.Message);
         }
     }
     [HttpPut]
     [Route("{id}")]
-    public IActionResult Put(int id, [FromBody] Despesa despesa){
-           if (id != despesa.DespesaId)
+    public IActionResult Put(int id, [FromBody] Despesa despesa)
+    {
+        if (id != despesa.DespesaId)
         {
             return BadRequest();
         }
-    
-        Despesa DespesaAtualizada =  new()
+
+        Despesa DespesaAtualizada = new()
         {
-            DespesaId =  id,
+            DespesaId = id,
             Valor = despesa.Valor,
-            Data = despesa.Data.ToLocalTime(),
-          
+            Data = despesa.Data.AddHours(3).ToLocalTime(),
+
         };
-         _context.Despesas.Update(DespesaAtualizada);
-         _context.SaveChanges();
-         return NoContent();
+        _context.Despesas.Update(DespesaAtualizada);
+        _context.SaveChanges();
+        return NoContent();
     }
 }

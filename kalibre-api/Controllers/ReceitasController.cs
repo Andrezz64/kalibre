@@ -17,29 +17,28 @@ public class ReceitasController : ControllerBase
     [HttpGet()]
     public IActionResult Get()
     {
-        var lista = _context.Receitas.OrderByDescending(despesas => despesas.Data);
+        var lista = _context.Receitas.OrderByDescending(receitas => receitas.Data);
 
-        return Ok(lista);
+      return Ok(new{Status="Ok",data=lista});
     }
 
     [HttpPost()]
     public IActionResult Post([FromBody] Receita receita)
     {
-        DateTime now = DateTime.Now;
-
         try
         {
             _context.Add(new Receita
             {
-                Data = now,
+                Data = receita.Data.AddHours(3).ToLocalTime(),
                 Valor = receita.Valor
             });
             _context.SaveChanges();
-            return Ok(receita);
+            return Ok(new { Status = "Ok", data = receita });
         }
         catch (Exception ex)
         {
-            return StatusCode(500, "ocorreu um erro interno: " + ex.Message);
+            System.Console.WriteLine(ex);
+            return StatusCode(500, new { status = "Error", msg = ex.Message });
         }
 
     }
@@ -59,7 +58,7 @@ public class ReceitasController : ControllerBase
             return StatusCode(204);
         }
         catch(Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException ex){
-            return NotFound("Não foi possivel localizar o objeto no banco de dados"+ex.Message);
+            return NotFound(new{status="Error",message=ex.Message});
         }
     }
     [HttpPut]
@@ -69,14 +68,16 @@ public class ReceitasController : ControllerBase
         {
             return BadRequest();
         }
-        Receita ReceitaAtualizada =  new()
+
+        Receita ReceitaAtualizada = new()
         {
-            Receitaid =  id,
+            Receitaid = id,
             Valor = receita.Valor,
-            Data = receita.Data
+            Data = receita.Data.AddHours(3).ToLocalTime(),
+
         };
-         _context.Receitas.Update(ReceitaAtualizada);
-         _context.SaveChanges();
-         return NoContent();
+        _context.Receitas.Update(ReceitaAtualizada);
+        _context.SaveChanges();
+        return NoContent();
     }
 }

@@ -1,20 +1,20 @@
 "use client";
 import { CircleNotch } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
-import Despesas from "../components/Despesas";
+import Receitas from "../components/Receitas";
 
-
-export default function Despesa() {
-  interface Despesa {
+export default function Receita() {
+  interface Receita {
     valor: number;
     data: Date;
-    despesaId: Number;
+    receitaid: number;
   }
 
   const [valor, setValor] = useState("");
   const [data, setData] = useState("");
+  const [receita, setReceita] = useState<Receita[]>();
 
-  function atualizarDespesas() {
+  function atualizarReceitas() {
     const options = {
       method: "GET",
       headers: {
@@ -23,18 +23,18 @@ export default function Despesa() {
       },
     };
 
-    fetch("http://172.16.32.16:5014/api/v1/despesas", options)
+    fetch("http://172.16.32.16:5014/api/v1/receitas", options)
       .then((response) => response.json())
       .then((response) => {
-        setDespesa(response.data);
-        console.log(response);
+        setReceita(response.data);
+        console.log(response.data);
       })
       .catch((err) => console.error(err));
   }
 
   const handleSubmit = async (e: any) => {
-   //const ConverterDate = new Date(data)
-    
+    //const ConverterDate = new Date(data)
+
     e.preventDefault();
     const options = {
       method: "POST",
@@ -44,37 +44,34 @@ export default function Despesa() {
       body: `{"valor":${valor},"data":"${data}"}`,
     };
 
-    await fetch("http://172.16.32.16:5014/api/v1/despesas", options)
+    await fetch("http://172.16.32.16:5014/api/v1/receitas", options)
       .then((response) => response.json())
       .then((response) => {
         console.log(response);
         if (response.status == "Ok") {
-          console.log("sucesso");
+          console.log(response);
 
-         
-          atualizarDespesas();
+          atualizarReceitas();
         } else {
-          alert("Ocorreu um error")
+          alert("Ocorreu um error");
         }
       })
       .catch((err) => console.error(err));
   };
 
-  const [despesa, setDespesa] = useState<Despesa[]>();
-
   useEffect(() => {
-    atualizarDespesas();
+    atualizarReceitas();
   }, []);
 
   return (
     <main>
       <div className="p-10">
         <strong className="flex justify-center">
-          <h1 className="text-lg">Despesas</h1>
+          <h1 className="text-lg">Receitas</h1>
         </strong>
-        {/* <FormDespesas></FormDespesas> */}
+
         <div className="border-b-2 border-[#191919] pb-[2rem]">
-          <h2 className="mt-5">Criar nova despesa</h2>
+          <h2 className="mt-5">Criar nova receita</h2>
           <form
             onSubmit={handleSubmit}
             className="flex max-md:flex-col gap-2 mt-5"
@@ -105,14 +102,14 @@ export default function Despesa() {
           </form>
         </div>
         <div className="mt-10 flex flex-wrap max-md:justify-center gap-5">
-          {despesa ? (
-            despesa.map((data) => {
+          {receita ? (
+            receita.map((data) => {
               return (
-                <Despesas
-                  despesaId={data.despesaId}
+                <Receitas
+                  receitaId={data.receitaid}
                   data={data.data}
                   valor={data.valor}
-                ></Despesas>
+                ></Receitas>
               );
             })
           ) : (
@@ -122,7 +119,6 @@ export default function Despesa() {
           )}
         </div>
       </div>
-
     </main>
   );
 }

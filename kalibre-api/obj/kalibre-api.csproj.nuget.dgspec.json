@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Projetos\\Kalibre\\kalibre\\kalibre-api\\kalibre-api.csproj": {}
+    "C:\\Users\\andre.infra\\projetos\\kalibre\\kalibre-api\\kalibre-api.csproj": {}
   },
   "projects": {
-    "C:\\Projetos\\Kalibre\\kalibre\\kalibre-api\\kalibre-api.csproj": {
+    "C:\\Users\\andre.infra\\projetos\\kalibre\\kalibre-api\\kalibre-api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projetos\\Kalibre\\kalibre\\kalibre-api\\kalibre-api.csproj",
+        "projectUniqueName": "C:\\Users\\andre.infra\\projetos\\kalibre\\kalibre-api\\kalibre-api.csproj",
         "projectName": "kalibre-api",
-        "projectPath": "C:\\Projetos\\Kalibre\\kalibre\\kalibre-api\\kalibre-api.csproj",
-        "packagesPath": "C:\\Users\\andre\\.nuget\\packages\\",
-        "outputPath": "C:\\Projetos\\Kalibre\\kalibre\\kalibre-api\\obj\\",
+        "projectPath": "C:\\Users\\andre.infra\\projetos\\kalibre\\kalibre-api\\kalibre-api.csproj",
+        "packagesPath": "C:\\Users\\andre.infra\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\andre.infra\\projetos\\kalibre\\kalibre-api\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\andre\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\andre.infra\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -38,6 +34,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -78,7 +79,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.201/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
