@@ -2,15 +2,14 @@
 import Image from "next/image";
 import Header from "./components/Header";
 import { LineChart } from "@mui/x-charts/LineChart";
-import { useEffect, useState } from "react";
-import {
-  blueberryTwilightPaletteDark,
-  blueberryTwilightPaletteLight,
-  cheerfulFiestaPaletteDark,
-} from "@mui/x-charts/colorPalettes";
+import { SetStateAction, useEffect, useState } from "react";
+import { cheerfulFiestaPaletteDark } from "@mui/x-charts/colorPalettes";
 import { BarChart } from "@mui/x-charts/BarChart";
+import Data from "./Data";
 
 export default function Home() {
+  const [despesaTotalPorMes, setDespesaTotalPorMes] = useState([0]);
+  const [receitaTotalPorMes, setReceitaTotalPorMes] = useState([0]);
   const mesesDoAno = [
     "Janeiro",
     "Fevereiro",
@@ -26,9 +25,43 @@ export default function Home() {
     "Dezembro",
   ];
 
+  useEffect(() => {
+    const ListaTemp: SetStateAction<number[]> = [];
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "User-Agent": "insomnia/8.6.1",
+      },
+    };
+
+    fetch(`http://${Data.FetchIp}/api/v1/dashboard`, options)
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.status == "Ok") {
+          response.despesaTotalAno.forEach(
+            (despesa: { valorTotal: number }) => {
+              ListaTemp.push(despesa.valorTotal);
+            }
+          );
+
+          setDespesaTotalPorMes(ListaTemp);
+          const listaReceita: SetStateAction<number[]> = [];
+          response.receitaTotalAno.forEach(
+            (receita: { valorTotal: number }) => {
+              listaReceita.push(receita.valorTotal);
+            }
+          );
+          setReceitaTotalPorMes(listaReceita);
+        } else {
+          alert("Ocorreu um error:" + response.msg);
+        }
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
   return (
     <main>
-    
       <h1 className=" text-center text-xl mt-10">Meu controle</h1>
       <div className="flex  justify-center flex-wrap">
         <div className="flex  flex-col mt-[7rem]">
@@ -42,8 +75,8 @@ export default function Home() {
             xAxis={[{ scaleType: "band", data: mesesDoAno }]}
             series={[
               {
-                label: "Valor em R$",
-                data: [2, 5.5, 2, 8.5, 1.5, 5, 6, 0, 12],
+                label: "Receitas(R$)",
+                data: receitaTotalPorMes,
               },
               {
                 data: [],
@@ -66,22 +99,20 @@ export default function Home() {
             xAxis={[{ scaleType: "band", data: mesesDoAno }]}
             series={[
               {
-                label: "Valor em R$",
-                data: [2, 5.5, 2, 8.5, 1.5, 5, 6, 0, 12],
-                color:"Red"
+                label: "Despesas(R$)",
+                data: despesaTotalPorMes,
+                color: "Red",
               },
               {
-                data: [],
+                data: receitaTotalPorMes,
               },
             ]}
             width={500}
             height={300}
             grid={{ vertical: true, horizontal: true }}
-
           />
         </div>
       </div>
     </main>
   );
 }
-

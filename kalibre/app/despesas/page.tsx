@@ -2,7 +2,7 @@
 import { CircleNotch } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import Despesas from "../components/Despesas";
-
+import Data from "../Data";
 
 export default function Despesa() {
   interface Despesa {
@@ -23,7 +23,7 @@ export default function Despesa() {
       },
     };
 
-    fetch("http://172.16.32.16:5014/api/v1/despesas", options)
+    fetch(`http://${Data.FetchIp}/api/v1/despesas`, options)
       .then((response) => response.json())
       .then((response) => {
         setDespesa(response.data);
@@ -33,15 +33,15 @@ export default function Despesa() {
   }
 
   const handleSubmit = async (e: any) => {
-   //const ConverterDate = new Date(data)
-    
+    //const ConverterDate = new Date(data)
+
     e.preventDefault();
     const options = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: `{"valor":${valor},"data":"${data}"}`,
+      body: `{"valor":${valor.replace(/,/g,".")},"data":"${data}"}`,
     };
 
     await fetch("http://172.16.32.16:5014/api/v1/despesas", options)
@@ -51,10 +51,9 @@ export default function Despesa() {
         if (response.status == "Ok") {
           console.log("sucesso");
 
-         
           atualizarDespesas();
         } else {
-          alert("Ocorreu um error")
+          alert("Ocorreu um error");
         }
       })
       .catch((err) => console.error(err));
@@ -84,7 +83,7 @@ export default function Despesa() {
               onChange={(e) => {
                 setValor(e.target.value);
               }}
-              type="number"
+              type="text"
               required
               className=" border-stone-300 border-2 max-w-[6rem]  rounded-lg bg-stone-100"
             />
@@ -122,7 +121,6 @@ export default function Despesa() {
           )}
         </div>
       </div>
-
     </main>
   );
 }

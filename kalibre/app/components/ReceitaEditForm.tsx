@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Receita from "../models/ReceitaModel";
+import Data from "../Data";
 
 export default function ReceitaEditForm(props:any){
     
@@ -8,16 +9,17 @@ export default function ReceitaEditForm(props:any){
 
     const editReceita = (e:any) =>{
         e.preventDefault()
+       console.log(valor)
         const options = {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
               
             },
-            body: `{"receitaid":${props.receitaId},"valor":${valor},"data":"${data}"}`
+            body: `{"receitaid":${props.receitaId},"valor":${valor.replace(/,/g,".")},"data":"${data}"}`
           };
           
-          fetch('http://172.16.32.16:5014/api/v1/receitas/'+props.receitaId, options)
+          fetch(`http://${Data.FetchIp}/api/v1/receitas/`+props.receitaId, options)
             .then(response => response.json())
             .then(response => console.log(response))
             .catch(err => console.error(err));
@@ -30,7 +32,7 @@ export default function ReceitaEditForm(props:any){
          <form onSubmit={editReceita} className="flex flex-col justify-center items-center  gap-2 mt-5">
         <span className="text-start">Valor</span>
         <input
-          type="number"
+          type="text"
           value={valor}
           onChange={(e:any)=>{setValor(e.target.value)}}
           required

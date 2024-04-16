@@ -2,6 +2,7 @@
 import { CircleNotch } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import Receitas from "../components/Receitas";
+import Data from "../Data";
 
 export default function Receita() {
   interface Receita {
@@ -41,10 +42,10 @@ export default function Receita() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: `{"valor":${valor},"data":"${data}"}`,
+      body: `{"valor":${valor.replace(/,/g,".")},"data":"${data}"}`,
     };
 
-    await fetch("http://172.16.32.16:5014/api/v1/receitas", options)
+    await fetch(`http://${Data.FetchIp}}/api/v1/receitas`, options)
       .then((response) => response.json())
       .then((response) => {
         console.log(response);
@@ -81,7 +82,7 @@ export default function Receita() {
               onChange={(e) => {
                 setValor(e.target.value);
               }}
-              type="number"
+              type="text"
               required
               className=" border-stone-300 border-2 max-w-[6rem]  rounded-lg bg-stone-100"
             />

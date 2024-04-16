@@ -13,6 +13,7 @@ import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import DespesaEditForm from "./DespesaEditForm";
 import { Calendar, CurrencyCircleDollar } from "@phosphor-icons/react";
+import FormatStringBrasil from "./FormatStringBrasil";
 
 export default function Despesas(props: Despesa) {
   const NovaInstanciaData = new Date(props.data);
@@ -60,10 +61,15 @@ export default function Despesas(props: Despesa) {
 
   return (
     <div className="bg-stone-200 max-w-[14rem] max-h-[10rem] p-2 rounded-lg shadow-lg">
-      <h2 className="flex items-center"><Calendar size={26} />{DataFormatada}</h2>
+      <h2 className="flex items-center">
+        <Calendar size={26} />
+        {DataFormatada}
+      </h2>
       <h2>
-        
-        <span className="text-red-500 flex items-center"><CurrencyCircleDollar size={26} />R${props.valor.toString()}</span>
+        <span className="text-red-500 flex items-center">
+          <CurrencyCircleDollar size={26} />
+          <FormatStringBrasil valor={props.valor}/>
+        </span>
       </h2>
       <div className="flex gap-3 mt-1">
         <Button variant="outlined" onClick={handleClickOpen}>

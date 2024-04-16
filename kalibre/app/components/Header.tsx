@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+"use client"
+import React, { useEffect, useState } from 'react';
 
 export default function Header() {
+
     // Estado para controlar a exibição do menu
     const [menuAberto, setMenuAberto] = useState(false);
-
+    useEffect(()=>{
+        if(window.navigator.userAgent.includes('Mobile') == false){
+            setMenuAberto(true)
+        }
+    })
     return (
         <header className="bg-black p-2 pl-5">
             <div className="flex items-center justify-between">
                 <h1 className="text-white">Kalibre Finanças</h1>
                 {/* Ícone de hambúrguer */}
                 <button
-                    className="text-white  text-2xl mr-10"
+                    className="text-white  text-2xl mr-10 md:hidden"
                     onClick={() => setMenuAberto(!menuAberto)}
                 >
                     &#9776;
