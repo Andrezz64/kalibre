@@ -6,24 +6,16 @@ import { SetStateAction, useEffect, useState } from "react";
 import { cheerfulFiestaPaletteDark } from "@mui/x-charts/colorPalettes";
 import { BarChart } from "@mui/x-charts/BarChart";
 import Data from "./Data";
+import Grafico from "./components/Grafico";
 
 export default function Home() {
   const [despesaTotalPorMes, setDespesaTotalPorMes] = useState([0]);
   const [receitaTotalPorMes, setReceitaTotalPorMes] = useState([0]);
-  const mesesDoAno = [
-    "Janeiro",
-    "Fevereiro",
-    "Março",
-    "Abril",
-    "Maio",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro",
-  ];
+
+  const [value, setValue] = useState(0);
+  const handleChange = (e: any) => {
+    setValue(e.target.value);
+  };
 
   useEffect(() => {
     const ListaTemp: SetStateAction<number[]> = [];
@@ -62,55 +54,46 @@ export default function Home() {
 
   return (
     <main>
-      <h1 className=" text-center text-xl mt-10">Meu controle</h1>
-      <div className="flex  justify-center flex-wrap">
-        <div className="flex  flex-col mt-[7rem]">
-          <div className="flex items-center gap-[34%] ">
-            <h2 className="text-lg pl-10">Receitas</h2>
-            <button className="bg-sky-500 p-1 rounded-md border-2 min-w-[10.6rem] border-transparent text-black hover:bg-transparent hover:border-sky-500 hover:text-sky-500 duration-300 ">
-              Registrar Receitas
-            </button>
-          </div>
-          <BarChart
-            xAxis={[{ scaleType: "band", data: mesesDoAno }]}
-            series={[
-              {
-                label: "Receitas(R$)",
-                data: receitaTotalPorMes,
-              },
-              {
-                data: [],
-              },
-            ]}
-            width={500}
-            height={300}
-            grid={{ vertical: true, horizontal: true }}
-            colors={cheerfulFiestaPaletteDark}
-          />
-        </div>
-        <div className="flex mt-[7rem] flex-col">
-          <div className="flex items-center gap-[34%] ">
-            <h2 className="text-lg pl-10">Despesas</h2>
-            <button className="bg-sky-500 p-1 rounded-md border-2 min-w-[8rem] border-transparent text-black hover:bg-transparent hover:border-sky-500 hover:text-sky-500 duration-300 ">
-              Registrar Despesas
-            </button>
-          </div>
-          <BarChart
-            xAxis={[{ scaleType: "band", data: mesesDoAno }]}
-            series={[
-              {
-                label: "Despesas(R$)",
-                data: despesaTotalPorMes,
-                color: "Red",
-              },
-              {
-                data: receitaTotalPorMes,
-              },
-            ]}
-            width={500}
-            height={300}
-            grid={{ vertical: true, horizontal: true }}
-          />
+      <div className="flex justify-center flex-col items-center">
+        <h1 className=" text-center text-xl mt-10 mb-10">Meu controle</h1>
+        <div>
+          <select
+            value={value}
+            name="graficos"
+            id="grafico"
+            onChange={handleChange}
+            className="bg-gray-200 rounded-lg p-[0.20rem]"
+          >
+            <option value={0}>Gráfico de despesas</option>
+            <option value={1}>Gráfico de receitas</option>
+            <option value={2}>Gráfico Receitas e Despesas</option>
+          </select>
+
+          {value == 0 && (
+            <Grafico
+              label={"Despesas(R$)"}
+              color="red"
+              data={despesaTotalPorMes}
+              _data={[]}
+            />
+          )}
+          {value == 1 && (
+            <Grafico
+              label={"Receitas(R$)"}
+              color="green"
+              data={receitaTotalPorMes}
+              _data={[]}
+            />
+          )}
+          {value == 2 && (
+            <Grafico
+              label={"Receitas(R$)"}
+              color="green"
+              data={receitaTotalPorMes}
+              _label="Despesas(R$)"
+              _data={despesaTotalPorMes}
+            />
+          )}
         </div>
       </div>
     </main>
