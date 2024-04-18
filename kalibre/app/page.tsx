@@ -1,10 +1,6 @@
 "use client";
-import Image from "next/image";
-import Header from "./components/Header";
-import { LineChart } from "@mui/x-charts/LineChart";
+
 import { SetStateAction, useEffect, useState } from "react";
-import { cheerfulFiestaPaletteDark } from "@mui/x-charts/colorPalettes";
-import { BarChart } from "@mui/x-charts/BarChart";
 import Data from "./Data";
 import Grafico from "./components/Grafico";
 
@@ -64,24 +60,25 @@ export default function Home() {
             onChange={handleChange}
             className="bg-gray-200 rounded-lg p-[0.20rem]"
           >
-            <option value={0}>Gráfico de despesas</option>
-            <option value={1}>Gráfico de receitas</option>
-            <option value={2}>Gráfico Receitas e Despesas</option>
+            <option value={0}>Gráfico Receitas e Despesas</option>
+            <option value={1}>Gráfico de despesas</option>
+            <option value={2}>Gráfico de receitas</option>
           </select>
 
           {value == 0 && (
             <Grafico
-              label={"Despesas(R$)"}
-              color="red"
-              data={despesaTotalPorMes}
-              _data={[]}
+              label={"Receitas(R$)"}
+              color="green"
+              data={receitaTotalPorMes}
+              _label="Despesas(R$)"
+              _data={despesaTotalPorMes}
             />
           )}
           {value == 1 && (
             <Grafico
-              label={"Receitas(R$)"}
-              color="green"
-              data={receitaTotalPorMes}
+              label={"Despesas(R$)"}
+              color="red"
+              data={despesaTotalPorMes}
               _data={[]}
             />
           )}
@@ -90,8 +87,7 @@ export default function Home() {
               label={"Receitas(R$)"}
               color="green"
               data={receitaTotalPorMes}
-              _label="Despesas(R$)"
-              _data={despesaTotalPorMes}
+              _data={[]}
             />
           )}
         </div>

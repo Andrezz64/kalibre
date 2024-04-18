@@ -68,7 +68,7 @@ export default function Despesas(props: Despesa) {
       <h2>
         <span className="text-red-500 flex items-center">
           <CurrencyCircleDollar size={26} />
-          <FormatStringBrasil valor={props.valor}/>
+          <FormatStringBrasil valor={props.valor} />
         </span>
       </h2>
       <div className="flex gap-3 mt-1">

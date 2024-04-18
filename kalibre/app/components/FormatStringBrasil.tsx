@@ -1,5 +1,6 @@
-export default function FormatStringBrasil(props:any){
-    return(
-        props.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-    )
+export default function FormatStringBrasil(props: any) {
+  return props.valor.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
 }

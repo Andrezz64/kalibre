@@ -3,7 +3,8 @@ import { CircleNotch } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import Receitas from "../components/Receitas";
 import Data from "../Data";
-
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 export default function Receita() {
   interface Receita {
     valor: number;
@@ -28,7 +29,6 @@ export default function Receita() {
       .then((response) => response.json())
       .then((response) => {
         setReceita(response.data);
-        console.log(response.data);
       })
       .catch((err) => console.error(err));
   }
@@ -42,19 +42,17 @@ export default function Receita() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: `{"valor":${valor.replace(/,/g,".")},"data":"${data}"}`,
+      body: `{"valor":${valor.replace(/,/g, ".")},"data":"${data}"}`,
     };
 
-    await fetch(`http://${Data.FetchIp}}/api/v1/receitas`, options)
+    await fetch(`http://${Data.FetchIp}/api/v1/receitas`, options)
       .then((response) => response.json())
       .then((response) => {
-        console.log(response);
         if (response.status == "Ok") {
-          console.log(response);
-
+          toast.success("Receita cadastrada!");
           atualizarReceitas();
         } else {
-          alert("Ocorreu um error");
+          toast.error("Ops! Ocorreu um error: " + response.msg);
         }
       })
       .catch((err) => console.error(err));
@@ -119,6 +117,7 @@ export default function Receita() {
             </div>
           )}
         </div>
+        <ToastContainer />
       </div>
     </main>
   );

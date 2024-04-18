@@ -1,5 +1,4 @@
-"use client"
-import type { Metadata } from "next";
+"use client";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
@@ -20,8 +19,9 @@ export default function RootLayout({
     <html lang="pt-BR">
       <title>Kalibre</title>
       <body className={inter.className}>
-      <Header></Header>
-        {children}</body>
+        <Header></Header>
+        {children}
+      </body>
     </html>
   );
 }

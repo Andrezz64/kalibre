@@ -4,7 +4,7 @@ namespace kalibre_api.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-public class DespesasController : ControllerBase
+public class DespesasController : ControllerBase // Controlador da rota de despesa
 {
     private readonly ILogger<DespesasController> _logger;
     private readonly KalibreContext _context = new();
@@ -15,24 +15,24 @@ public class DespesasController : ControllerBase
     }
 
     [HttpGet()]
-    public IActionResult Get()
+    public IActionResult Get() // Obtem as despesas presentes no banco e retorna para o front-end
     {
-        var lista = _context.Despesas.OrderByDescending(despesas => despesas.Data);
+        var lista = _context.Despesas.OrderByDescending(despesas => despesas.Data); // Selecioando a entidade, ordenando pelas mais recentes
 
         return Ok(new { Status = "Ok", data = lista });
     }
 
     [HttpPost()]
-    public IActionResult Post([FromBody] Despesa despesa)
+    public IActionResult Post([FromBody] Despesa despesa) // Criar uma nova despesa apartir de um POST
     {
         try
         {
-            _context.Add(new Despesa
+            _context.Add(new Despesa // Inicializa uma nova entidade, na forma de classe cs, que será usada como referencia para o entity
             {
-                Data = despesa.Data.AddHours(3).ToLocalTime(),
+                Data = despesa.Data.AddHours(3).ToLocalTime(), // Ajusta para o hórario brasileiro, apartir do hórário do pacifico
                 Valor = despesa.Valor
             });
-            _context.SaveChanges();
+            _context.SaveChanges(); // Salva a nova entry no banco de dados
             return Ok(new { Status = "Ok", data = despesa });
         }
         catch (Exception ex)
@@ -44,7 +44,7 @@ public class DespesasController : ControllerBase
     }
     [HttpDelete()]
     [Route("{id}")]
-    public IActionResult Delete(int id)
+    public IActionResult Delete(int id) // apaga uma despesa do banco de dados, apartir de um ID presente na url
     {
         try
         {
@@ -52,7 +52,7 @@ public class DespesasController : ControllerBase
             {
                 DespesaId = id
             };
-            _context.Remove(despesa);
+            _context.Remove(despesa); // remove do banco a despesa relativa ao id passado pelo objeto
             _context.SaveChanges();
 
             return StatusCode(204);
@@ -64,22 +64,29 @@ public class DespesasController : ControllerBase
     }
     [HttpPut]
     [Route("{id}")]
-    public IActionResult Put(int id, [FromBody] Despesa despesa)
+    public IActionResult Put(int id, [FromBody] Despesa despesa) // Altera uma despesa no banco de dados
     {
-        if (id != despesa.DespesaId)
+        try
         {
-            return BadRequest();
+            if (id != despesa.DespesaId) // valida se o ID passado na URL é igual ao presente no Body
+            {
+                return BadRequest();
+            }
+
+            Despesa DespesaAtualizada = new()
+            {
+                DespesaId = id,
+                Valor = despesa.Valor,
+                Data = despesa.Data.AddHours(3).ToLocalTime(),
+
+            };
+            _context.Despesas.Update(DespesaAtualizada);
+            _context.SaveChanges();
+            return NoContent();
         }
-
-        Despesa DespesaAtualizada = new()
+        catch (Exception ex)
         {
-            DespesaId = id,
-            Valor = despesa.Valor,
-            Data = despesa.Data.AddHours(3).ToLocalTime(),
-
-        };
-        _context.Despesas.Update(DespesaAtualizada);
-        _context.SaveChanges();
-        return NoContent();
+            return StatusCode(501, new { status = "Error", msg = ex.Message });
+        }
     }
 }

@@ -3,6 +3,7 @@ import { CircleNotch } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import Despesas from "../components/Despesas";
 import Data from "../Data";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Despesa() {
   interface Despesa {
@@ -27,7 +28,6 @@ export default function Despesa() {
       .then((response) => response.json())
       .then((response) => {
         setDespesa(response.data);
-        console.log(response);
       })
       .catch((err) => console.error(err));
   }
@@ -41,19 +41,18 @@ export default function Despesa() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: `{"valor":${valor.replace(/,/g,".")},"data":"${data}"}`,
+      body: `{"valor":${valor.replace(/,/g, ".")},"data":"${data}"}`,
     };
 
     await fetch("http://172.16.32.16:5014/api/v1/despesas", options)
       .then((response) => response.json())
       .then((response) => {
-        console.log(response);
         if (response.status == "Ok") {
-          console.log("sucesso");
+          toast.success("Despesa cadastrada!");
 
           atualizarDespesas();
         } else {
-          alert("Ocorreu um error");
+          toast.error("Ops! Ocorreu um erro: " + response.msg);
         }
       })
       .catch((err) => console.error(err));
@@ -120,6 +119,7 @@ export default function Despesa() {
             </div>
           )}
         </div>
+        <ToastContainer />
       </div>
     </main>
   );

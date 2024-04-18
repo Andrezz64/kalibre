@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace kalibre_api;
+﻿namespace kalibre_api;
 
 public partial class Receita
 {

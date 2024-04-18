@@ -4,7 +4,7 @@ namespace kalibre_api.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
-public class ReceitasController : ControllerBase
+public class ReceitasController : ControllerBase // Controlador da rota de despesa
 {
     private readonly ILogger<ReceitasController> _logger;
     private readonly KalibreContext _context = new();
@@ -15,24 +15,24 @@ public class ReceitasController : ControllerBase
     }
 
     [HttpGet()]
-    public IActionResult Get()
+    public IActionResult Get() // Obtem as receitas presentes no banco e retorna para o front-end
     {
-        var lista = _context.Receitas.OrderByDescending(receitas => receitas.Data);
+        var lista = _context.Receitas.OrderByDescending(receitas => receitas.Data); // Selecioando a entidade, ordenando pelas mais recentes
 
-      return Ok(new{Status="Ok",data=lista});
+        return Ok(new { Status = "Ok", data = lista });
     }
 
     [HttpPost()]
-    public IActionResult Post([FromBody] Receita receita)
+    public IActionResult Post([FromBody] Receita receita) // Criar uma nova receita apartir de um POST
     {
         try
         {
-            _context.Add(new Receita
+            _context.Add(new Receita // Inicializa uma nova entidade, na forma de classe cs, que será usada como referencia para o entity
             {
-                Data = receita.Data.AddHours(3).ToLocalTime(),
+                Data = receita.Data.AddHours(3).ToLocalTime(), // Ajusta para o hórario brasileiro, apartir do hórário do pacifico
                 Valor = receita.Valor
             });
-            _context.SaveChanges();
+            _context.SaveChanges(); // Salva a nova entry no banco de dados
             return Ok(new { Status = "Ok", data = receita });
         }
         catch (Exception ex)
@@ -44,7 +44,7 @@ public class ReceitasController : ControllerBase
     }
     [HttpDelete()]
     [Route("{id}")]
-    public IActionResult Delete(int id)
+    public IActionResult Delete(int id) // apaga uma receita do banco de dados, apartir de um ID presente na url
     {
         try
         {
@@ -52,32 +52,41 @@ public class ReceitasController : ControllerBase
             {
                 Receitaid = id
             };
-            _context.Remove(receita);
+            _context.Remove(receita); // remove do banco a receita relativa ao id passado pelo objeto
             _context.SaveChanges();
 
             return StatusCode(204);
         }
-        catch(Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException ex){
-            return NotFound(new{status="Error",message=ex.Message});
+        catch (Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException ex)
+        {
+            return NotFound(new { status = "Error", message = ex.Message });
         }
     }
     [HttpPut]
     [Route("{id}")]
-    public IActionResult Put(int id, [FromBody] Receita receita){
-           if (id != receita.Receitaid)
+    public IActionResult Put(int id, [FromBody] Receita receita) // Altera uma receita no banco de dados
+    {
+        try
         {
-            return BadRequest();
+            if (id != receita.Receitaid) // valida se o ID passado na URL é igual ao presente no Body
+            {
+                return BadRequest();
+            }
+
+            Receita ReceitaAtualizada = new()
+            {
+                Receitaid = id,
+                Valor = receita.Valor,
+                Data = receita.Data.AddHours(3).ToLocalTime(),
+
+            };
+            _context.Receitas.Update(ReceitaAtualizada);
+            _context.SaveChanges();
+            return NoContent();
         }
-
-        Receita ReceitaAtualizada = new()
+        catch (Exception ex)
         {
-            Receitaid = id,
-            Valor = receita.Valor,
-            Data = receita.Data.AddHours(3).ToLocalTime(),
-
-        };
-        _context.Receitas.Update(ReceitaAtualizada);
-        _context.SaveChanges();
-        return NoContent();
+            return StatusCode(501, new { status = "Error", msg = ex.Message });
+        }
     }
 }
