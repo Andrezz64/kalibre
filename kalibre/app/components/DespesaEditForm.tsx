@@ -36,7 +36,10 @@ export default function DespesaEditForm(props: any) {
       <span className="text-start">Valor</span>
       <input
         type="text"
-        value={valor}
+        value={valor.toString().replace(
+          ".",
+          ","
+        )}
         onChange={(e: any) => {
           setValor(e.target.value);
         }}
