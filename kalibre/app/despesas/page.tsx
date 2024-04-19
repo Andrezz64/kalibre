@@ -2,6 +2,7 @@
 import { CircleNotch } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import Despesas from "../components/Despesas";
+import 'react-toastify/dist/ReactToastify.css';
 import Data from "../Data";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -44,7 +45,7 @@ export default function Despesa() {
       body: `{"valor":${valor.replace(/,/g, ".")},"data":"${data}"}`,
     };
 
-    await fetch("http://172.16.32.16:5014/api/v1/despesas", options)
+    await fetch(`http://${Data.FetchIp}/api/v1/despesas`, options)
       .then((response) => response.json())
       .then((response) => {
         if (response.status == "Ok") {

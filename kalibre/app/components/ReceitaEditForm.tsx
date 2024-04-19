@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Receita from "../models/ReceitaModel";
+
 import Data from "../Data";
 
 export default function ReceitaEditForm(props: any) {
@@ -8,13 +8,13 @@ export default function ReceitaEditForm(props: any) {
 
   const editReceita = (e: any) => {
     e.preventDefault();
-    console.log(valor);
+   
     const options = {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: `{"receitaid":${props.receitaId},"valor":${valor.replace(
+      body: `{"receitaid":${props.receitaId},"valor":${valor.toString().replace(
         /,/g,
         "."
       )},"data":"${data}"}`,

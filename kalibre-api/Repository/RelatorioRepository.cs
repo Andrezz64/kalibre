@@ -1,14 +1,16 @@
-// Classe dedicada a analise do banco para relatorios
+using kalibre_api;
 
-namespace kalibre_api.Controllers;
-class DbDespesaReceitaAnalitycs
+public class RelatorioRepository : IRelatorioRepository
 {
-    private readonly KalibreContext _context = new();
+       private readonly KalibreContext _Dbcontext;
 
-    public object AnaliseDespesaEmPeriodo(DateTime DataInicial, DateTime DataFinal)  // Faz a analise dentro do banco baseada na data passada como argumento, retornando a soma de despesas e soma dos valores
+       public RelatorioRepository(KalibreContext dbcontext){
+        _Dbcontext = dbcontext;
+       }
+    public object AnaliseDespesaEmPeriodo(DateTime DataInicial, DateTime DataFinal)
     {
-        decimal ValorDespesa = 0; // Inicia a variável que receberá a soma das despesas.
-        var Despesas = _context.Despesas // realiza a busca no banco dentro do periodo passado como argumento, retornando as entidades no formato de um array
+       decimal ValorDespesa = 0; // Inicia a variável que receberá a soma das despesas.
+        var Despesas = _Dbcontext.Despesas // realiza a busca no banco dentro do periodo passado como argumento, retornando as entidades no formato de um array
         .Where(order => order.Data >= new DateTime(DataInicial.Year, DataInicial.Month, DataInicial.Day) && order.Data <= new DateTime(DataFinal.Year, DataFinal.Month, DataFinal.Day))
         .ToList();
 
@@ -23,11 +25,11 @@ class DbDespesaReceitaAnalitycs
             ValorDespesa,
         };
     }
-    public object AnaliseReceitaEmPeriodo(DateTime DataInicial, DateTime DataFinal) // Faz a analise dentro do banco baseada na data passada como argumento, retornando a soma de receitas e soma dos valores
-    {
 
+    public object AnaliseReceitaEmPeriodo(DateTime DataInicial, DateTime DataFinal)
+    {
         decimal ValorReceita = 0; // Inicia a variável que receberá a soma das receitas.
-        var Receitas = _context.Receitas // realiza a busca no banco dentro do periodo passado como argumento, retornando as entidades no formato de um array
+        var Receitas = _Dbcontext.Receitas // realiza a busca no banco dentro do periodo passado como argumento, retornando as entidades no formato de um array
         .Where(order => order.Data >= new DateTime(DataInicial.Year, DataInicial.Month, DataInicial.Day) && order.Data <= new DateTime(DataFinal.Year, DataFinal.Month, DataFinal.Day))
         .ToList();
         

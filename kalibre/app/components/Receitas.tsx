@@ -15,6 +15,7 @@ import { Calendar, CurrencyCircleDollar } from "@phosphor-icons/react";
 
 import ReceitaEditForm from "./ReceitaEditForm";
 import FormatStringBrasil from "./FormatStringBrasil";
+import Data from "../Data";
 
 export default function Receitas(props: any) {
   const NovaInstanciaData = new Date(props.data);
@@ -49,13 +50,13 @@ export default function Receitas(props: any) {
     };
 
     fetch(
-      "http://172.16.32.16:5014/api/v1/receitas/" + props.receitaId,
+      `http://${Data.FetchIp}/api/v1/receitas/` + props.receitaId,
       options
     )
       .then((response) => response.json())
       .then((response) => console.log(response))
       .catch((err) => console.error(err));
-    console.log(props);
+   
     location.reload();
   };
 

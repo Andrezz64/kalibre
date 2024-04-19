@@ -6,14 +6,16 @@ export default function DespesaEditForm(props: any) {
   const [data, setData] = useState(props.data);
 
   const editDespesa = (e: any) => {
+   if(valor == ""){
+    setValor(props.valor)
+   }
     e.preventDefault();
     const options = {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "X-Api-Key": "IpKH1FJ7lw5Canu8cvA5T2AGsLdivGjt2PDm09Uz",
       },
-      body: `{"despesaId":${props.despesaid},"valor":${valor.replace(
+      body: `{"despesaId":${props.despesaid},"valor":${valor.toString().replace(
         /,/g,
         "."
       )},"data":"${data}"}`,
@@ -21,7 +23,7 @@ export default function DespesaEditForm(props: any) {
 
     fetch(`http://${Data.FetchIp}/api/v1/despesas/` + props.despesaid, options)
       .then((response) => response.json())
-      .then((response) => console.log(response))
+      .then((response) => console.log("Atualizado"))
       .catch((err) => console.error(err));
     location.reload();
   };

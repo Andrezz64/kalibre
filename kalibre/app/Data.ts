@@ -1,5 +1,5 @@
  const Data = {
-    "FetchIp":"172.16.32.16:5014"
+    "FetchIp":"192.168.0.112:5014"
 }
 
 export default Data

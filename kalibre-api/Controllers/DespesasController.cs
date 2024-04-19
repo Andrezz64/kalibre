@@ -7,17 +7,20 @@ namespace kalibre_api.Controllers;
 public class DespesasController : ControllerBase // Controlador da rota de despesa
 {
     private readonly ILogger<DespesasController> _logger;
-    private readonly KalibreContext _context = new();
 
-    public DespesasController(ILogger<DespesasController> logger)
+    private readonly IDespesaRepository _repository;
+  
+
+    public DespesasController(ILogger<DespesasController> logger, IDespesaRepository repository)
     {
         _logger = logger;
+        _repository = repository;
     }
 
     [HttpGet()]
     public IActionResult Get() // Obtem as despesas presentes no banco e retorna para o front-end
     {
-        var lista = _context.Despesas.OrderByDescending(despesas => despesas.Data); // Selecioando a entidade, ordenando pelas mais recentes
+        List<Despesa> lista = _repository.GetAll(); // Selecioando a entidade, ordenando pelas mais recentes
 
         return Ok(new { Status = "Ok", data = lista });
     }
@@ -27,17 +30,12 @@ public class DespesasController : ControllerBase // Controlador da rota de despe
     {
         try
         {
-            _context.Add(new Despesa // Inicializa uma nova entidade, na forma de classe cs, que será usada como referencia para o entity
-            {
-                Data = despesa.Data.AddHours(3).ToLocalTime(), // Ajusta para o hórario brasileiro, apartir do hórário do pacifico
-                Valor = despesa.Valor
-            });
-            _context.SaveChanges(); // Salva a nova entry no banco de dados
+            _repository.Insert(despesa);
             return Ok(new { Status = "Ok", data = despesa });
         }
         catch (Exception ex)
         {
-            System.Console.WriteLine(ex);
+        
             return StatusCode(500, new { status = "Error", msg = ex.Message });
         }
 
@@ -48,13 +46,7 @@ public class DespesasController : ControllerBase // Controlador da rota de despe
     {
         try
         {
-            Despesa despesa = new()
-            {
-                DespesaId = id
-            };
-            _context.Remove(despesa); // remove do banco a despesa relativa ao id passado pelo objeto
-            _context.SaveChanges();
-
+            _repository.Delete(id);
             return StatusCode(204);
         }
         catch (Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException ex)
@@ -73,15 +65,8 @@ public class DespesasController : ControllerBase // Controlador da rota de despe
                 return BadRequest();
             }
 
-            Despesa DespesaAtualizada = new()
-            {
-                DespesaId = id,
-                Valor = despesa.Valor,
-                Data = despesa.Data.AddHours(3).ToLocalTime(),
+            _repository.Update(despesa);
 
-            };
-            _context.Despesas.Update(DespesaAtualizada);
-            _context.SaveChanges();
             return NoContent();
         }
         catch (Exception ex)

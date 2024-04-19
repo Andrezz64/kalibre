@@ -14,6 +14,7 @@ import { useState } from "react";
 import DespesaEditForm from "./DespesaEditForm";
 import { Calendar, CurrencyCircleDollar } from "@phosphor-icons/react";
 import FormatStringBrasil from "./FormatStringBrasil";
+import Data from "../Data";
 
 export default function Despesas(props: Despesa) {
   const NovaInstanciaData = new Date(props.data);
@@ -48,7 +49,7 @@ export default function Despesas(props: Despesa) {
     };
 
     fetch(
-      "http://172.16.32.16:5014/api/v1/despesas/" + props.despesaId,
+      `http://${Data.FetchIp}/api/v1/despesas/` + props.despesaId,
       options
     )
       .then((response) => response.json())

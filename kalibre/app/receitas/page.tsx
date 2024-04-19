@@ -25,7 +25,7 @@ export default function Receita() {
       },
     };
 
-    fetch("http://172.16.32.16:5014/api/v1/receitas", options)
+    fetch(`http://${Data.FetchIp}/api/v1/receitas`, options)
       .then((response) => response.json())
       .then((response) => {
         setReceita(response.data);
